@@ -24,8 +24,17 @@ let playing = false;
 let canvas = document.getElementById("character");
 let ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth > 900 ? 800 : window.innerWidth - 100;
-canvas.height = window.innerHeight > 800 ? 800 : window.innerHeight - 100;
+canvas.width = window.innerWidth > 600 ? 500 : window.innerWidth - 100;
+canvas.height = window.innerHeight > 800 ? 700 : window.innerHeight - 100;
+
+function drawLine() {
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height - 15);
+  ctx.lineTo(canvas.width, canvas.height - 15);
+  ctx.lineWidth = 10;
+  ctx.stroke();
+}
+drawLine();
 
 // 배경화면 크기 설정
 $("body").css({
@@ -46,14 +55,14 @@ bombPic.children("img").css({
 
 // 스킬 존 설정
 $("#skill-zone").css({
-  top: window.innerHeight - 70,
-  left: window.innerWidth / 2 - 70,
+  top: canvas.height + 20,
+  left: canvas.width / 2 - 70,
 });
 
 // 오디오 설정
 $("#audio").css({
-  top: window.innerHeight - 45,
-  left: window.innerWidth - 120,
+  top: canvas.height + 50,
+  left: canvas.width - 90,
 });
 
 const bgmBtn = document.querySelector("#bgm-btn");
@@ -321,7 +330,8 @@ $("#start-btn").on("click", () => {
 function ExecutePerFrame() {
   animation = requestAnimationFrame(ExecutePerFrame);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  showSkillCool();
+  $("#skill-timer").html(`스킬 : ${skillCool}초 남음`);
+  drawLine();
 
   let rand_timer = Math.random();
   // Add boy
@@ -397,7 +407,7 @@ function collisionCheck(boy, i) {
       });
       gameOver.then(() => {
         resetGame();
-        showAlert();
+        alert(`Game Over!`);
       });
     }
   }
@@ -438,19 +448,11 @@ function changeScore() {
   score_board.innerText = score;
 }
 
-function showAlert() {
-  alert(`Game Over!`);
-}
-
 setInterval(function () {
   if (skillCool > 0 && playing === true) {
     skillCool--;
   }
 }, 1000);
-
-function showSkillCool() {
-  $("#skill-timer").html(`스킬 : ${skillCool}초 남음`);
-}
 
 function resetSkillCool() {
   skillCool = girl.cool;
