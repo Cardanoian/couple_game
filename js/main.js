@@ -1,5 +1,5 @@
 const basic_title = "커플게임";
-const firstBomb = 10;
+const firstBomb = 2;
 const bombPic = $("#bomb-pic");
 const couples = [
   "발규하민",
@@ -47,7 +47,7 @@ bombPic.children("img").css({
 // 스킬 존 설정
 $("#skill-zone").css({
   top: window.innerHeight - 70,
-  left: window.innerWidth / 2 - 20,
+  left: window.innerWidth / 2 - 70,
 });
 
 // 오디오 설정
@@ -57,7 +57,12 @@ $("#audio").css({
 });
 
 const bgmBtn = document.querySelector("#bgm-btn");
-const soundElem = document.querySelector("#sound");
+const bombElem = document.querySelector("#bomb-effect");
+const gameOverElem = document.querySelector("#gameover");
+const invalElem = document.querySelector("#gameover");
+const pointElem = document.querySelector("#point");
+const skillElem = document.querySelector("#skill");
+const startElem = document.querySelector("#start");
 const bgmElem = document.querySelector("#bgm");
 let allowAudio = false;
 
@@ -65,15 +70,13 @@ const AudioContext = window.AudioContext;
 const audioCtx = new AudioContext();
 
 // 효과음 설정
-function playSound(occasion) {
-  if (soundElem.paused) {
-    soundElem.src = `audio/${occasion}.mp3`;
-    soundElem.play();
+function playSound(elem) {
+  if (elem.paused) {
+    elem.play();
   } else {
-    soundElem.src = `audio/${occasion}.mp3`;
-    soundElem.pause();
-    soundElem.currentTime = 0;
-    soundElem.play();
+    elem.pause();
+    elem.currentTime = 0;
+    elem.play();
   }
 }
 
@@ -95,7 +98,7 @@ document.querySelector("#bgm-btn").addEventListener("click", pressBgmBtn);
 // 폭탄 보여주기
 const showBomb = () => {
   bombPic.css("opacity", "0.7");
-  playSound("bomb");
+  playSound(bombElem);
   changeBombNum();
   setTimeout(() => {
     bombPic.css("opacity", "0");
@@ -157,12 +160,9 @@ const girl_stat = [
     50,
     "img/girl/0.png",
     () => {
+      playSound(skillElem);
       resetSkillCool();
-      boys.forEach((e) => {
-        if (e.char === 0) {
-          e.x = girl.x;
-        }
-      });
+      haminSkill();
     },
     15,
   ], // 하민
@@ -174,11 +174,9 @@ const girl_stat = [
     50,
     "img/girl/1.png",
     () => {
+      playSound(skillElem);
       resetSkillCool();
-      girl.char = 998;
-      setTimeout(() => {
-        girl.char = 1;
-      }, 4000);
+      minjuSkill();
     },
     20,
   ], // 민주
@@ -190,14 +188,9 @@ const girl_stat = [
     20,
     "img/girl/2.png",
     () => {
+      playSound(skillElem);
       resetSkillCool();
-      girl.char = 1000;
-      setTimeout(() => {
-        girl.char = 999;
-      }, 3000);
-      setTimeout(() => {
-        girl.char = 2;
-      }, 5000);
+      ttSkill();
     },
     30,
   ], // 텅텅
@@ -209,10 +202,9 @@ const girl_stat = [
     50,
     "img/girl/3.png",
     function () {
+      playSound(skillElem);
       resetSkillCool();
-      boys.forEach((e) => {
-        e.y -= 150;
-      });
+      kukuSkill();
     },
     12,
   ], // 지영
@@ -224,14 +216,9 @@ const girl_stat = [
     50,
     "img/girl/4.png",
     function () {
+      playSound(skillElem);
       resetSkillCool();
-      boyfriendPercent = 19;
-      setTimeout(() => {
-        boyfriendPercent = 89;
-      }, 8000);
-      setTimeout(() => {
-        boyfriendPercent = 74;
-      }, 11000);
+      uengSkill();
     },
     20,
   ], // 가현
@@ -243,14 +230,9 @@ const girl_stat = [
     50,
     "img/girl/5.png",
     () => {
+      playSound(skillElem);
       resetSkillCool();
-      girl.speed = 8;
-      setTimeout(() => {
-        girl.speed = 3;
-      }, 4000);
-      setTimeout(() => {
-        girl.speed = 4;
-      }, 8000);
+      squidSkill();
     },
     15,
   ], //  서진
@@ -262,17 +244,9 @@ const girl_stat = [
     50,
     "img/girl/6.png",
     () => {
+      playSound(skillElem);
       resetSkillCool();
-      girl.width = 20;
-      girl.height = 20;
-      setTimeout(() => {
-        girl.width = 75;
-        girl.height = 75;
-        girl.char = 997;
-      }, 6000);
-      setTimeout(() => {
-        girl.char = 6;
-      }, 6500);
+      yunseoSkill();
     },
     11,
   ], // 유덕
@@ -336,7 +310,7 @@ let girl = new Girl(character);
 
 // Start 버튼을 누를 때
 $("#start-btn").on("click", () => {
-  playSound("start");
+  playSound(startElem);
   girl = new Girl(character);
   resetGame();
   ExecutePerFrame();
@@ -402,7 +376,7 @@ function collisionCheck(boy, i) {
     y_gap < boy.height - 20
   ) {
     if (girl.char === boy.char || girl.char === 1000) {
-      playSound("point");
+      playSound(pointElem);
       boys.splice(i, 1);
       skillCool = skillCool > 1 ? skillCool - 1 : skillCool;
       score += girl.get_score;
@@ -413,12 +387,12 @@ function collisionCheck(boy, i) {
         last_score = score;
       }
     } else if (girl.char === 998) {
-      playSound("inval");
+      playSound(invalElem);
       boys.splice(i, 1);
     } else if (girl.char === 997) {
     } else {
       let gameOver = new Promise((resolve) => {
-        playSound("gameover");
+        playSound(gameOverElem);
         resolve();
       });
       gameOver.then(() => {
@@ -475,9 +449,73 @@ setInterval(function () {
 }, 1000);
 
 function showSkillCool() {
-  $("#skill-timer").html(`쿨 : ${skillCool}`);
+  $("#skill-timer").html(`스킬 : ${skillCool}초 남음`);
 }
 
 function resetSkillCool() {
   skillCool = girl.cool;
+}
+
+function yunseoSkill() {
+  girl.width = 20;
+  girl.height = 20;
+  setTimeout(() => {
+    girl.width = 75;
+    girl.height = 75;
+    girl.char = 997;
+  }, 6000);
+  setTimeout(() => {
+    girl.char = 6;
+  }, 6500);
+}
+
+function squidSkill() {
+  girl.speed = 8;
+  setTimeout(() => {
+    girl.speed = 3;
+  }, 4000);
+  setTimeout(() => {
+    girl.speed = 4;
+  }, 8000);
+}
+
+function uengSkill() {
+  boyfriendPercent = 19;
+  setTimeout(() => {
+    boyfriendPercent = 89;
+  }, 8000);
+  setTimeout(() => {
+    boyfriendPercent = 74;
+  }, 11000);
+}
+
+function kukuSkill() {
+  boys.forEach((e) => {
+    e.y -= 150;
+  });
+}
+
+function ttSkill() {
+  girl.char = 1000;
+  setTimeout(() => {
+    girl.char = 999;
+  }, 3000);
+  setTimeout(() => {
+    girl.char = 2;
+  }, 5000);
+}
+
+function minjuSkill() {
+  girl.char = 998;
+  setTimeout(() => {
+    girl.char = 1;
+  }, 4000);
+}
+
+function haminSkill() {
+  boys.forEach((e) => {
+    if (e.char === 0) {
+      e.x = girl.x;
+    }
+  });
 }
