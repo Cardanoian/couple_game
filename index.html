@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <title>6-5 커플게임</title>
-</head>
-<body>
-<div>
-    <label>Score</label>
-    <label id="score">0</label>
-</div>
-<canvas id="character"></canvas>
-<script src="main.js"></script>
-</body>
+    <link rel="stylesheet" href="style.css" />
+    <title>커플게임</title>
+  </head>
+  <body>
+    <div>
+      <form id="character_sel">
+        <label style="margin: 0 30px;">캐릭터</label>
+        <select id="select_character"></select>
+      </form>
+      <div id="score_board">
+        <label>Score</label>
+        <label id="score">0</label>
+      </div>
+    </div>
+    <canvas id="character"></canvas>
+    <script src="js/main.js"></script>
+  </body>
 </html>

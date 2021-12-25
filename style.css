@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'maplestory';
+    src: url('Maplestory OTF Bold.otf') format('opentype');
+}
+body {
+    font-family: 'maplestory', sans-serif;
+}
+#character_sel {
+    height: 40px;
+    width: 300px;
+    align-content: space-between;
+    font-size: x-large;
+    margin-bottom: 10px;
+    display: block;
+    float: left;
+}
+
+#select_character {
+    height: 30px;
+    width: 140px;
+    font-size: large;
+    margin: 5px;
+    text-align: center;
+    font-family: maplestory, sans-serif;
+}
+
+#score_board {
+    display: inline-block;
+    float: left;
+    margin: 10px 5px 5px 5px;
+    font-size: x-large;
+}
