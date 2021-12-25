@@ -2,21 +2,56 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <link
+      href="img/girl/0.png"
+      rel="shortcut icon"
+      type="image/x-icon"
+      class="favicon"
+    />
     <link rel="stylesheet" href="style.css" />
-    <title>커플게임</title>
+    <title>커플게임 <<발규하민>></title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
+    <div id="bomb-pic">
+      <img src="img/bomb.png" alt="" class="hide" />
+    </div>
+
     <div>
-      <form id="character_sel">
-        <label style="margin: 0 30px;">캐릭터</label>
-        <select id="select_character"></select>
+      <form id="character-sel">
+        <label
+          for="select-character"
+          style="margin: 0 30px"
+          id="character-label"
+          >캐릭터</label
+        >
+        <select id="select-character"></select>
       </form>
-      <div id="score_board">
+      <div>
+        <button id="start-btn">Start!</button>
+      </div>
+      <div id="score-board">
         <label>Score</label>
         <label id="score">0</label>
       </div>
     </div>
+    <div id="bomb">
+      <label>BOMB X </label>
+      <label id="bomb-num"></label>
+    </div>
     <canvas id="character"></canvas>
+    <div id="audio">
+      <button id="bgm-btn">소리켜기</button>
+      <audio src="/audio/bgm.mp3" id="bgm"></audio>
+      <audio id="sound" src="audio/bomb.mp3"></audio>
+    </div>
+    <div id="skill-zone">
+      <p id="skill-timer"></p>
+    </div>
     <script src="js/main.js"></script>
   </body>
 </html>
