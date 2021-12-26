@@ -1,7 +1,7 @@
 const basic_title = "커플게임";
-const firstBomb = 2;
 const bombPic = $("#bomb-pic");
 const skillZone = $("#skill-zone");
+const firstBomb = 2;
 const couples = [
   "발규하민",
   "민주혹기",
@@ -20,6 +20,15 @@ let bomb = firstBomb;
 let skillCool = 10;
 let boyfriendPercent = 74;
 let playing = false;
+let onSkill = false;
+let status = {
+  immortal: false,
+  lovely: false,
+  weak: false,
+  superHamin: false,
+  invisible: false,
+};
+let life = 1;
 
 // Canvas 설정
 let canvas = document.getElementById("character");
@@ -63,27 +72,26 @@ bombPic.children("img").css({
 // 스킬 존 설정
 skillZone.css({
   top: canvas.height + 13,
-  left: canvas.width / 2 - 70,
+  left: canvas.width - 220,
 });
 
 // 오디오 설정
 $("#audio").css({
   top: canvas.height + 48,
-  left: canvas.width - 130,
+  left: canvas.width - 125,
 });
 
-const bgmBtn = document.querySelector("#bgm-btn");
+// const bgmBtn = document.querySelector("#bgm-btn");
 const bombElem = document.querySelector("#bomb-effect");
 const gameOverElem = document.querySelector("#gameover");
-const invalElem = document.querySelector("#inval");
+const immortalElem = document.querySelector("#inval");
 const pointElem = document.querySelector("#point");
 const skillElem = document.querySelector("#skill");
 const startElem = document.querySelector("#start");
 const bgmElem = document.querySelector("#bgm");
-let allowAudio = false;
 
-const AudioContext = window.AudioContext;
-const audioCtx = new AudioContext();
+// const AudioContext = window.AudioContext;
+// const audioCtx = new AudioContext();
 
 // 효과음 설정
 function playSound(elem) {
@@ -96,20 +104,12 @@ function playSound(elem) {
   }
 }
 
-// bgm btn 설정
-function pressBgmBtn() {
-  if (bgmElem.paused) {
-    allowAudio = true;
-    bgmElem.play();
-    bgmBtn.textContent = "소리끄기";
-  } else {
-    allowAudio = false;
-    bgmElem.pause();
-    bgmElem.currentTime = 0;
-    bgmBtn.textContent = "소리켜기";
-  }
+// bgm on
+function bgmOn() {
+  bgmElem.currentTime = 0;
+  bgmElem.play();
 }
-document.querySelector("#bgm-btn").addEventListener("click", pressBgmBtn);
+// document.querySelector("#bgm-btn").addEventListener("click", bgmOn);
 
 // 폭탄 보여주기
 const showBomb = () => {
@@ -196,135 +196,133 @@ const bg = {
 bg.img.src = "img/bg.png";
 
 // 여학생 능력치
+
 const girl_stat = [
-  //width, height, speed, get_score, bomb_score
-  [
-    70,
-    70,
-    3,
-    5,
-    50,
-    "img/girl/0.png",
-    () => {
+  {
+    name: "하민",
+    size: 70,
+    speed: 3,
+    getPoint: 5,
+    bombPoint: 50,
+    img: "img/girl/0.png",
+    cool: 15,
+    skill: () => {
       playSound(skillElem);
       resetSkillCool();
       haminSkill();
     },
-    15,
-  ], // 하민
-  [
-    80,
-    80,
-    4,
-    4,
-    50,
-    "img/girl/1.png",
-    () => {
+  },
+  {
+    name: "민주",
+    size: 80,
+    speed: 4,
+    getPoint: 4,
+    bombPoint: 50,
+    img: "img/girl/1.png",
+    cool: 20,
+    skill: () => {
       playSound(skillElem);
       resetSkillCool();
       minjuSkill();
     },
-    20,
-  ], // 민주
-  [
-    65,
-    65,
-    3,
-    5,
-    20,
-    "img/girl/2.png",
-    () => {
+  },
+  {
+    name: "텅텅",
+    size: 65,
+    speed: 3,
+    getPoint: 5,
+    bombPoint: 20,
+    img: "img/girl/2.png",
+    cool: 25,
+    skill: () => {
       playSound(skillElem);
       resetSkillCool();
       ttSkill();
     },
-    25,
-  ], // 텅텅
-  [
-    80,
-    80,
-    2,
-    10,
-    50,
-    "img/girl/3.png",
-    function () {
+  },
+  {
+    name: "쿠쿠",
+    size: 80,
+    speed: 2,
+    getPoint: 8,
+    bombPoint: 50,
+    img: "img/girl/3.png",
+    cool: 15,
+    skill: () => {
       playSound(skillElem);
       resetSkillCool();
       kukuSkill();
     },
-    7,
-  ], // 지영
-  [
-    65,
-    65,
-    3,
-    5,
-    50,
-    "img/girl/4.png",
-    function () {
+  },
+  {
+    name: "우앵",
+    size: 65,
+    speed: 3,
+    getPoint: 5,
+    bombPoint: 50,
+    img: "img/girl/4.png",
+    cool: 30,
+    skill: () => {
       playSound(skillElem);
       resetSkillCool();
       uengSkill();
     },
-    20,
-  ], // 가현
-  [
-    65,
-    65,
-    4,
-    5,
-    50,
-    "img/girl/5.png",
-    () => {
+  },
+  {
+    name: "쭈꾸미",
+    size: 65,
+    speed: 4,
+    getPoint: 5,
+    bombPoint: 50,
+    img: "img/girl/5.png",
+    cool: 15,
+    skill: () => {
       playSound(skillElem);
       resetSkillCool();
       squidSkill();
     },
-    13,
-  ], //  서진
-  [
-    75,
-    75,
-    3,
-    7,
-    50,
-    "img/girl/6.png",
-    () => {
+  },
+  {
+    name: "유덕화",
+    size: 75,
+    speed: 3,
+    getPoint: 7,
+    bombPoint: 50,
+    img: "img/girl/6.png",
+    cool: 15,
+    skill: () => {
       playSound(skillElem);
       resetSkillCool();
       yunseoSkill();
     },
-    11,
-  ], // 유덕
+  },
 ];
 const boy_stat = [
-  //width, height, speed
-  [60, 60, 4, "img/boy/0.png"], // 규하
-  [65, 65, 3, "img/boy/1.png"], // 혹기
-  [70, 70, 2, "img/boy/2.png"], // 준우
-  [75, 75, 1, "img/boy/3.png"], // 근호
-  [60, 60, 3, "img/boy/4.png"], // 재무
-  [60, 60, 4, "img/boy/5.png"], // 호퍼
-  [65, 65, 3, "img/boy/6.png"], // 현준
+  { name: "규하", size: 60, speed: 5, img: "img/boy/0.png" },
+  { name: "혹기", size: 65, speed: 3, img: "img/boy/1.png" },
+  { name: "준우", size: 70, speed: 2, img: "img/boy/2.png" },
+  { name: "근호", size: 75, speed: 2, img: "img/boy/3.png" },
+  { name: "재무", size: 60, speed: 3, img: "img/boy/4.png" },
+  { name: "호퍼", size: 60, speed: 4, img: "img/boy/5.png" },
+  { name: "현준", size: 65, speed: 3, img: "img/boy/6.png" },
 ];
 
 class Girl {
   constructor(char) {
     console.log(char);
-    this.width = girl_stat[char][0];
-    this.height = girl_stat[char][1];
-    this.x = canvas.width / 2 + this.width / 2;
+    this.width = girl_stat[char].size;
+    this.height = girl_stat[char].size;
+    this.x = canvas.width / 2 - this.width / 2;
     this.y = canvas.height - this.height - 10;
     this.char = char;
     this.img = new Image();
-    this.speed = girl_stat[char][2];
-    this.get_score = girl_stat[char][3];
-    this.bomb_score = girl_stat[char][4];
-    this.name = couples[char];
-    this.img.src = girl_stat[char][5];
-    this.skill = girl_stat[char][6];
-    this.cool = girl_stat[char][7];
-    console.log(this);
+    this.speed = girl_stat[char].speed;
+    this.get_score = girl_stat[char].getPoint;
+    this.bomb_score = girl_stat[char].bombPoint;
+    this.name = girl_stat[char].name;
+    this.img.src = girl_stat[char].img;
+    this.skill = girl_stat[char].skill;
+    this.cool = girl_stat[char].cool;
   }
   draw() {
     // ctx.fillStyle = "green";
@@ -336,13 +334,13 @@ class Boy {
   constructor(x, char) {
     this.x = x;
     this.y = 10;
-    this.width = boy_stat[char][0];
-    this.height = boy_stat[char][1];
+    this.name = boy_stat[char].name;
+    this.width = boy_stat[char].size;
+    this.height = boy_stat[char].size;
     this.char = char;
-    this.speed = boy_stat[char][2];
+    this.speed = boy_stat[char].speed;
     this.img = new Image();
-    this.img.src = boy_stat[char][3];
-    console.log(this);
+    this.img.src = boy_stat[char].img;
   }
   draw() {
     // ctx.fillStyle = "red";
@@ -356,13 +354,13 @@ let girl = new Girl(character);
 
 // Start 버튼을 누를 때
 $("#start-btn").on("click", () => {
-  playing = true;
   playSound(startElem);
   girl = new Girl(character);
+  bgmOn();
   resetGame();
+  playing = true;
   ExecutePerFrame();
   changeBombNum();
-  playing = true;
 });
 
 function ExecutePerFrame() {
@@ -374,7 +372,7 @@ function ExecutePerFrame() {
 
     let rand_timer = Math.random();
     // Add boy
-    if (rand_timer >= 0.975) {
+    if (rand_timer >= 0.97) {
       let char_int =
         Math.floor(Math.random() * 100) > boyfriendPercent
           ? girl.char
@@ -414,6 +412,10 @@ function resetGame() {
   skillCool = girl.cool;
   $("#bomb-pic").css({ opacity: "0" });
   changeScore();
+  onSkill = false;
+  for (let key in status) {
+    status[key] = false;
+  }
 }
 
 // collision
@@ -425,30 +427,36 @@ function collisionCheck(boy, i) {
       (x_gap < 0 && -x_gap < girl.width - 20)) &&
     y_gap < boy.height - 20
   ) {
-    if (girl.char === boy.char || girl.char === 1000) {
+    if (status.immortal) {
+      playSound(immortalElem);
+      boys.splice(i, 1);
+    } else if (status.invisible || (status.superHamin && boy.char === 0)) {
+    } else if (girl.char === boy.char || status.lovely) {
       playSound(pointElem);
       boys.splice(i, 1);
       skillCool = skillCool > 1 ? skillCool - 1 : skillCool;
       score += girl.get_score;
       changeScore();
-      changeBombNum();
       if (score - last_score >= girl.bomb_score) {
         bomb++;
         last_score = score;
+        if (girl.name === "쿠쿠" && life === 1) {
+          life++;
+        }
       }
-    } else if (girl.char === 998) {
-      playSound(invalElem);
-      boys.splice(i, 1);
-    } else if (girl.char === 997) {
-    } else if (girl.char === 996 && boy.char === 0) {
+      changeBombNum();
     } else {
-      let gameOver = new Promise((resolve) => {
-        playSound(gameOverElem);
-        resolve();
-      });
-      gameOver.then(() => {
-        playing = false;
-      });
+      if (life === 2) {
+        life--;
+      } else {
+        let gameOver = new Promise((resolve) => {
+          playSound(gameOverElem);
+          resolve();
+        });
+        gameOver.then(() => {
+          playing = false;
+        });
+      }
     }
   }
 }
@@ -460,12 +468,6 @@ document.addEventListener("keydown", function (e) {
     if (bomb > 0 && playing === true) {
       bomb -= 1;
       boys = boys.filter((e) => e.char === girl.char);
-
-      // boys.forEach(function (e, i, o) {
-      //   if (e.char !== girl.char) {
-      //     o.splice(i, 1);
-      //   }
-      // });
       showBomb();
     }
   } else if (e.key === "Left" || e.key === "ArrowLeft") {
@@ -503,101 +505,135 @@ function resetSkillCool() {
 }
 
 function yunseoSkill() {
-  girl.width = 20;
-  girl.height = 20;
-  setTimeout(() => {
-    skillZone.addClass("danger");
-  }, 5000);
-  setTimeout(() => {
-    girl.width = 75;
-    girl.height = 75;
-    girl.char = 997;
-  }, 6000);
-  setTimeout(() => {
-    skillZone.removeClass("danger");
-    girl.char = 6;
-  }, 7000);
+  if (!onSkill) {
+    onSkill = true;
+    girl.width = 20;
+    girl.height = 20;
+    setTimeout(() => {
+      skillZone.addClass("danger");
+    }, 5000);
+    setTimeout(() => {
+      girl.width = 75;
+      girl.height = 75;
+      status.invisible = true;
+    }, 6000);
+    setTimeout(() => {
+      onSkill = false;
+      skillZone.removeClass("danger");
+      status.invisible = false;
+    }, 7000);
+  }
 }
 
 function squidSkill() {
-  girl.speed = 8;
-  setTimeout(() => {
-    skillZone.addClass("danger");
-  }, 3000);
-  setTimeout(() => {
-    girl.speed = 3;
-  }, 4000);
-  setTimeout(() => {
-    skillZone.removeClass("danger");
-    girl.speed = 4;
-  }, 6000);
+  if (!onSkill) {
+    onSkill = true;
+    girl.speed = 8;
+    setTimeout(() => {
+      skillZone.addClass("danger");
+    }, 3000);
+    setTimeout(() => {
+      girl.speed = 3;
+    }, 4000);
+    setTimeout(() => {
+      onSkill = false;
+      skillZone.removeClass("danger");
+      girl.speed = 4;
+    }, 6000);
+  }
 }
 
 function uengSkill() {
-  boyfriendPercent = 9;
-  setTimeout(() => {
-    skillZone.addClass("danger");
-    boyfriendPercent = 89;
-  }, 8000);
-  setTimeout(() => {
-    skillZone.removeClass("danger");
-    boyfriendPercent = 74;
-  }, 11000);
+  if (!onSkill) {
+    onSkill = true;
+    boyfriendPercent = 9;
+    setTimeout(() => {
+      skillZone.addClass("danger");
+      boyfriendPercent = 89;
+    }, 8000);
+    setTimeout(() => {
+      onSkill = false;
+      skillZone.removeClass("danger");
+      boyfriendPercent = 74;
+    }, 11000);
+  }
 }
 
 function kukuSkill() {
   boys.forEach((e) => {
-    e.y -= 150;
+    if (e.y <= 250) {
+      e.y = 0;
+    } else {
+      e.y -= 250;
+    }
   });
 }
 
 function ttSkill() {
-  girl.char = 1000;
-  setTimeout(() => {
-    skillZone.addClass("danger");
-  }, 2000);
-  setTimeout(() => {
-    skillZone.removeClass("danger");
-    girl.char = 999;
-  }, 3000);
-  setTimeout(() => {
-    girl.char = 2;
-  }, 5000);
+  if (!onSkill) {
+    onSkill = true;
+    status.lovely = true;
+    setTimeout(() => {
+      skillZone.addClass("danger");
+    }, 2000);
+    setTimeout(() => {
+      status.lovely = false;
+      status.weak = true;
+    }, 3000);
+    setTimeout(() => {
+      onSkill = false;
+      skillZone.removeClass("danger");
+      status.weak = false;
+    }, 5000);
+  }
 }
 
 function minjuSkill() {
-  girl.char = 998;
-  setTimeout(() => {
-    skillZone.addClass("danger");
-  }, 3000);
-  setTimeout(() => {
-    skillZone.removeClass("danger");
-    girl.char = 1;
-  }, 4000);
+  if (!onSkill) {
+    onSkill = true;
+    status.immortal = true;
+    setTimeout(() => {
+      skillZone.addClass("danger");
+    }, 3000);
+    setTimeout(() => {
+      onSkill = false;
+      skillZone.removeClass("danger");
+      status.immortal = false;
+    }, 4000);
+  }
 }
 
 function haminSkill() {
-  girl.char = 996;
-  let timer = 0;
-  let gyuha = boys.filter((e) => e.char === 0);
-  let point = gyuha.length;
-  let haminInterval = setInterval(() => {
-    if (timer > 24) {
-      clearInterval(haminInterval);
-    }
-    timer++;
-    gyuha.forEach((e) => {
-      if (e.char === 0) {
-        e.x = girl.x;
+  if (!onSkill) {
+    onSkill = true;
+    status.superHamin = true;
+    let timer = 0;
+    let gyuha = boys.filter((e) => e.char === 0);
+    let point = gyuha.length;
+    let haminInterval = setInterval(() => {
+      if (timer > 20) {
+        clearInterval(haminInterval);
       }
-    });
-  }, 100);
-  setTimeout(() => {
-    skillZone.addClass("danger");
-  }, 1300);
-  setTimeout(() => {
-    girl.char = 0;
-    skillZone.removeClass("danger");
-    score += point * 5;
-  }, 2300);
+      timer++;
+      gyuha.forEach((e) => {
+        if (e.char === 0) {
+          e.x = girl.x;
+        }
+      });
+    }, 100);
+    setTimeout(() => {
+      skillZone.addClass("danger");
+    }, 1000);
+    setTimeout(() => {
+      onSkill = false;
+      status.superHamin = false;
+      skillZone.removeClass("danger");
+      score += point * 5;
+      if (point >= skillCool) {
+        skillCool = 0;
+      } else {
+        skillCool -= point;
+      }
+    }, 2000);
+  }
 }

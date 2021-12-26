@@ -12,11 +12,12 @@ body {
 
 #character-sel {
   height: 40px;
-  width: 300px;
+  width: 280px;
   align-content: space-between;
   font-size: x-large;
+  color: white;
   margin-bottom: 10px;
-  margin-left: 30px;
+  margin-left: 25px;
   display: block;
   float: left;
 }
@@ -28,7 +29,7 @@ body {
 
 #select-character {
   height: 30px;
-  width: 120px;
+  width: 100px;
   font-size: large;
   /*margin: 5px;*/
   text-align: center;
@@ -39,18 +40,19 @@ canvas {
 }
 #start-btn {
   display: inline-block;
-  width: 90px;
+  width: 85px;
   height: 32px;
   float: left;
-  margin: 0 10px 5px 10px;
+  margin: 0 10px 5px 5px;
+  font-family: "maplestory", sans-serif;
   font-size: x-large;
 }
 
 #score-board {
-  display: inline-block;
   float: left;
   margin: 5px 5px 5px 5px;
   font-size: x-large;
+  color: white;
 }
 
 #bomb {
@@ -79,7 +81,7 @@ canvas {
 
 #bgm-btn {
   font-family: "maplestory", sans-serif;
-  display: inline-block;
+  display: none;
   float: left;
   margin: 0 10px 5px 10px;
   font-size: x-large;
@@ -87,8 +89,9 @@ canvas {
 
 #skill-zone {
   height: 30px;
-  width: 200px;
+  width: 220px;
   font-size: xx-large;
+  text-align: right;
   position: fixed;
   left: 10px;
   color: white;
