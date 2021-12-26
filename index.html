@@ -29,7 +29,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Modal 제목</h4>
+            <h4 class="modal-title" id="myModalLabel">2021 문덕초 6-5 커플게임</h4>
           </div>
           <div class="modal-body">
             <form id="character-sel">
@@ -39,6 +39,7 @@
                 id="character-label"
                 >캐릭터</label>
               <select id="select-character"></select>
+              <p id="menu-score" style="display: inline; margin-left: 30px">점수 : 0점</p>
             </form>
           </div>
           <div class="modal-footer">
@@ -61,7 +62,7 @@
     <div id="top-menu"></div>
 
     <div id="score-board">
-      <label>Score</label>
+      <label>점수</label>
       <label id="score">0</label>
         <button
                 type="button"
@@ -72,10 +73,11 @@
         >
             메뉴보기
         </button>
+      <label id="life">Life 1</label>
     </div>
     <div id="bomb">
       <label>BOMB X </label>
-      <label id="bomb-num"></label>
+      <label id="bomb-num">2</label>
     </div>
     <canvas id="character"></canvas>
     <div id="audio">
@@ -89,7 +91,7 @@
       <audio id="gameover" src="audio/gameover.mp3"></audio>
     </div>
     <div id="skill-zone">
-      <p id="skill-timer"></p>
+      <p id="skill-timer">쿨 : 15초</p>
     </div>
     <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"

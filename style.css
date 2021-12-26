@@ -21,6 +21,7 @@ canvas {
 
 #score-board {
   float: left;
+  width: 500px;
   margin: 5px 5px 5px 55px;
   font-size: x-large;
   color: white;
@@ -28,10 +29,14 @@ canvas {
 
 #show-menu{
   display: inline-block;
-  margin-left: 115px;
+  float: right;
   margin-top: 0;
 }
 
+#life {
+  float: right;
+  margin-right: 140px;
+}
 #bomb {
   height: 10px;
   width: 200px;
@@ -49,12 +54,12 @@ canvas {
 }
 
 #skill-zone {
+  float: right;
   height: 30px;
   width: 220px;
   font-size: xx-large;
   text-align: right;
   position: fixed;
-  left: 10px;
   color: white;
 }
 

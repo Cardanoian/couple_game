@@ -4,6 +4,8 @@ const bombNum = $("#bomb-num");
 const skillZone = $("#skill-zone");
 const startBtn = $("#start-btn");
 const closeBtn = $("#close-btn");
+const menuScore = $("#menu-score");
+const lifeBar = $("#life");
 const firstBomb = 2;
 const couples = [
   "발규하민",
@@ -32,7 +34,7 @@ let status = {
   superHamin: false,
   invisible: false,
 };
-let life = 1;
+let life;
 
 // Canvas 설정
 let canvas = document.getElementById("character");
@@ -67,7 +69,7 @@ $("#bomb").css({ top: canvas.height + 38 });
 
 // 스킬 존 설정
 skillZone.css({
-  top: canvas.height + 40,
+  top: canvas.height + 38,
   left: canvas.width - 220,
 });
 
@@ -142,9 +144,11 @@ $("#select-character").on("change", function (e) {
     $(".favicon").attr("href", `img/girl/${character}.png`);
     switch (character) {
       case 0:
+        life = 1;
         skillElem.src = "audio/skill/bakka.mp3";
         break;
       case 1:
+        life = 1;
         if (Math.random() >= 0.5) {
           skillElem.src = "audio/skill/siden.mp3";
         } else {
@@ -152,21 +156,27 @@ $("#select-character").on("change", function (e) {
         }
         break;
       case 2:
+        life = 1;
         skillElem.src = "audio/skill/tt.mp3";
         break;
       case 3:
+        life = 2;
         skillElem.src = "audio/skill/mamot.mp3";
         break;
       case 4:
+        life = 1;
         skillElem.src = "audio/skill/baby.mp3";
         break;
       case 5:
+        life = 1;
         skillElem.src = "audio/skill/squid.mp3";
         break;
       case 6:
+        life = 1;
         skillElem.src = "audio/skill/ys.mp3";
         break;
       default:
+        life = 1;
         skillElem.src = "audio/skill.mp3";
         break;
     }
@@ -351,6 +361,21 @@ $("#show-menu").on("click", () => {
     pause = true;
     playing = false;
     bgmElem.pause();
+  } else if (pause) {
+    pause = false;
+    playing = true;
+    bgmElem.play();
+    ExecutePerFrame();
+  }
+});
+
+// 닫기 버튼을 누를 때
+closeBtn.on("click", () => {
+  if (pause) {
+    pause = false;
+    playing = true;
+    bgmElem.play();
+    ExecutePerFrame();
   }
 });
 
@@ -371,7 +396,6 @@ function ExecutePerFrame() {
     animation = requestAnimationFrame(ExecutePerFrame);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     $("#skill-timer").html(`스킬 : ${skillCool}초 남음`);
-    // drawLine();
 
     let rand_timer = Math.random();
     // Add boy
@@ -402,6 +426,15 @@ function ExecutePerFrame() {
 
     // girl Draw
     girl.draw();
+
+    // life bar renew
+    lifeBar.html(`Life ${life}`);
+
+    // menu score
+    if (score > 0) {
+      menuScore.html(`점수 : ${score}점`);
+    } else {
+    }
   }
 }
 
@@ -416,6 +449,7 @@ function resetGame() {
   $("#bomb-pic").css({ opacity: "0" });
   changeScore();
   onSkill = false;
+  menuScore.html("점수 : 0점");
   for (let key in status) {
     status[key] = false;
   }
@@ -451,6 +485,7 @@ function collisionCheck(boy, i) {
     } else {
       if (life === 2) {
         life--;
+        boys.splice(i, 1);
       } else {
         let gameOver = new Promise((resolve) => {
           playSound(gameOverElem);
@@ -459,6 +494,8 @@ function collisionCheck(boy, i) {
         gameOver.then(() => {
           playing = false;
           $("#start-btn").html("시작");
+          bgmElem.pause();
+          bgmElem.currentTime = 0;
         });
       }
     }
@@ -471,7 +508,7 @@ document.addEventListener("keydown", function (e) {
   if (e.key === "z" || e.key === "Z") {
     if (bomb > 0 && playing === true) {
       bomb -= 1;
-      boys = boys.filter((e) => e.char === girl.char);
+      boys = boys.filter((a) => a.char === girl.char);
       showBomb();
     }
   } else if (e.key === "Left" || e.key === "ArrowLeft") {
@@ -490,6 +527,8 @@ document.addEventListener("keydown", function (e) {
     if (skillCool === 0) {
       girl.skill();
     }
+  } else if (e.key === "Escape") {
+    $("#show-menu").trigger("click");
   }
 });
 
