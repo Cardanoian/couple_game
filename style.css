@@ -34,7 +34,9 @@ body {
   text-align: center;
   font-family: maplestory, sans-serif;
 }
-
+canvas {
+  position: relative;
+}
 #start-btn {
   display: inline-block;
   width: 90px;

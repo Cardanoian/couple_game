@@ -52,8 +52,8 @@ $("body").css({
 bombPic.css({
   height: canvas.height * 0.6,
   width: canvas.width * 0.8,
-  top: canvas.height * 0.2,
-  left: canvas.width * 0.2,
+  top: canvas.height * 0.25,
+  left: canvas.width * 0.11,
 });
 bombPic.children("img").css({
   height: canvas.height * 0.6,
@@ -62,7 +62,7 @@ bombPic.children("img").css({
 
 // 스킬 존 설정
 skillZone.css({
-  top: canvas.height + 20,
+  top: canvas.height + 13,
   left: canvas.width / 2 - 70,
 });
 
@@ -440,6 +440,7 @@ function collisionCheck(boy, i) {
       playSound(invalElem);
       boys.splice(i, 1);
     } else if (girl.char === 997) {
+    } else if (girl.char === 996 && boy.char === 0) {
     } else {
       let gameOver = new Promise((resolve) => {
         playSound(gameOverElem);
@@ -576,9 +577,27 @@ function minjuSkill() {
 }
 
 function haminSkill() {
-  boys.forEach((e) => {
-    if (e.char === 0) {
-      e.x = girl.x;
+  girl.char = 996;
+  let timer = 0;
+  let gyuha = boys.filter((e) => e.char === 0);
+  let point = gyuha.length;
+  let haminInterval = setInterval(() => {
+    if (timer > 24) {
+      clearInterval(haminInterval);
     }
-  });
+    timer++;
+    gyuha.forEach((e) => {
+      if (e.char === 0) {
+        e.x = girl.x;
+      }
+    });
+  }, 100);
+  setTimeout(() => {
+    skillZone.addClass("danger");
+  }, 1300);
+  setTimeout(() => {
+    girl.char = 0;
+    skillZone.removeClass("danger");
+    score += point * 5;
+  }, 2300);
 }
