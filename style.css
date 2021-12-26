@@ -4,55 +4,32 @@
 }
 
 body {
-  font-family: "maplestory", sans-serif;
   background-image: url("img/bg.png");
   background-size: contain;
   background-repeat: no-repeat;
-}
-
-#character-sel {
-  height: 40px;
-  width: 280px;
-  align-content: space-between;
-  font-size: x-large;
-  color: white;
-  margin-bottom: 10px;
-  margin-left: 25px;
-  display: block;
-  float: left;
-}
-
-#character-label {
-  width: 150px;
-  margin: 15px 10px 10px 10px;
 }
 
 #select-character {
   height: 30px;
   width: 100px;
   font-size: large;
-  /*margin: 5px;*/
   text-align: center;
-  font-family: maplestory, sans-serif;
 }
 canvas {
   position: relative;
 }
-#start-btn {
-  display: inline-block;
-  width: 85px;
-  height: 32px;
-  float: left;
-  margin: 0 10px 5px 5px;
-  font-family: "maplestory", sans-serif;
-  font-size: x-large;
-}
 
 #score-board {
   float: left;
-  margin: 5px 5px 5px 5px;
+  margin: 5px 5px 5px 55px;
   font-size: x-large;
   color: white;
+}
+
+#show-menu{
+  display: inline-block;
+  margin-left: 115px;
+  margin-top: 0;
 }
 
 #bomb {
@@ -69,22 +46,6 @@ canvas {
   transition: all 1s;
   opacity: 0;
   z-index: 5;
-}
-#audio {
-  height: 10px;
-  width: 200px;
-  font-size: large;
-  position: fixed;
-  left: 10px;
-  color: white;
-}
-
-#bgm-btn {
-  font-family: "maplestory", sans-serif;
-  display: none;
-  float: left;
-  margin: 0 10px 5px 10px;
-  font-size: x-large;
 }
 
 #skill-zone {

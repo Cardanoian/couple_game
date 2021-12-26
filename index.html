@@ -9,34 +9,69 @@
       class="favicon"
     />
     <link rel="stylesheet" href="style.css" />
-    <title>커플게임 <<발규하민>></title>
-    <script
-      src="https://code.jquery.com/jquery-3.6.0.min.js"
-      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+      integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
-    ></script>
+    />
+    <title>커플게임 <<발규하민>></title>
   </head>
   <body>
-    <div id="bomb-pic">
-      <img src="img/bomb.png" alt="" class="hide" />
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Modal 제목</h4>
+          </div>
+          <div class="modal-body">
+            <form id="character-sel">
+              <label
+                for="select-character"
+                style="margin: 0 30px"
+                id="character-label"
+                >캐릭터</label>
+              <select id="select-character"></select>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="start-btn" data-dismiss="modal">
+              시작
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              id="close-btn"
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="top-menu">
-      <form id="character-sel">
-        <label
-          for="select-character"
-          style="margin: 0 30px"
-          id="character-label"
-          >캐릭터</label
+
+    <div id="top-menu"></div>
+
+    <div id="score-board">
+      <label>Score</label>
+      <label id="score">0</label>
+        <button
+                type="button"
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#myModal"
+                id="show-menu"
         >
-        <select id="select-character"></select>
-      </form>
-      <div>
-        <button id="start-btn">Start!</button>
-      </div>
-      <div id="score-board">
-        <label>Score</label>
-        <label id="score">0</label>
-      </div>
+            메뉴보기
+        </button>
     </div>
     <div id="bomb">
       <label>BOMB X </label>
@@ -44,7 +79,7 @@
     </div>
     <canvas id="character"></canvas>
     <div id="audio">
-      <button id="bgm-btn">소리켜기</button>
+      <!--      <button id="bgm-btn">소리켜기</button>-->
       <audio src="/audio/bgm.mp3" id="bgm"></audio>
       <audio id="bomb-effect" src="audio/bomb.mp3"></audio>
       <audio id="skill" src="audio/skill.mp3"></audio>
@@ -56,6 +91,16 @@
     <div id="skill-zone">
       <p id="skill-timer"></p>
     </div>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+      crossorigin="anonymous"
+    ></script>
     <script src="js/main.js"></script>
   </body>
 </html>

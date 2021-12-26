@@ -1,6 +1,9 @@
 const basic_title = "커플게임";
 const bombPic = $("#bomb-pic");
+const bombNum = $("#bomb-num");
 const skillZone = $("#skill-zone");
+const startBtn = $("#start-btn");
+const closeBtn = $("#close-btn");
 const firstBomb = 2;
 const couples = [
   "발규하민",
@@ -20,6 +23,7 @@ let bomb = firstBomb;
 let skillCool = 10;
 let boyfriendPercent = 74;
 let playing = false;
+let pause = false;
 let onSkill = false;
 let status = {
   immortal: false,
@@ -41,17 +45,6 @@ canvas.height = 740;
 $(document).ready(function () {
   window.resizeTo(610, 880);
 });
-
-// 선 긋기
-// function drawLine() {
-//   ctx.beginPath();
-//   ctx.moveTo(0, canvas.height - 15);
-//   ctx.lineTo(canvas.width, canvas.height - 15);
-//   ctx.lineWidth = 10;
-//   ctx.stroke();
-// }
-// drawLine();
-
 // 배경화면 크기 설정
 $("body").css({
   backgroundSize: `${canvas.width + 10}px ${canvas.height + 80}px`,
@@ -69,9 +62,12 @@ bombPic.children("img").css({
   width: canvas.width * 0.8,
 });
 
+// 폭탄 숫자 위치 설정
+$("#bomb").css({ top: canvas.height + 38 });
+
 // 스킬 존 설정
 skillZone.css({
-  top: canvas.height + 13,
+  top: canvas.height + 40,
   left: canvas.width - 220,
 });
 
@@ -123,7 +119,7 @@ const showBomb = () => {
 
 // 폭탄 숫자 바꾸기
 function changeBombNum() {
-  $("#bomb-num").html(bomb);
+  bombNum.html(`${bomb}개`);
 }
 
 // 선택지 만들기
@@ -178,7 +174,6 @@ $("#select-character").on("change", function (e) {
     $("title").html(basic_title);
   }
 });
-$("#bomb-num").html(`${bomb}개`);
 
 // 배경화면 설정
 const bg = {
@@ -348,13 +343,21 @@ class Boy {
   }
 }
 
-$("#bomb").css({ top: canvas.height + 45 });
-
 let girl = new Girl(character);
 
+// 메뉴 보기 버튼
+$("#show-menu").on("click", () => {
+  if (playing) {
+    pause = true;
+    playing = false;
+    bgmElem.pause();
+  }
+});
+
 // Start 버튼을 누를 때
-$("#start-btn").on("click", () => {
+startBtn.on("click", () => {
   playSound(startElem);
+  startBtn.html("다시시작");
   girl = new Girl(character);
   bgmOn();
   resetGame();
@@ -455,6 +458,7 @@ function collisionCheck(boy, i) {
         });
         gameOver.then(() => {
           playing = false;
+          $("#start-btn").html("시작");
         });
       }
     }
