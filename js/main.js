@@ -88,6 +88,7 @@ const pointElem = document.querySelector("#point");
 const skillElem = document.querySelector("#skill");
 const startElem = document.querySelector("#start");
 const bgmElem = document.querySelector("#bgm");
+const lifeElem = document.querySelector("#life-lost");
 
 // const AudioContext = window.AudioContext;
 // const audioCtx = new AudioContext();
@@ -397,9 +398,9 @@ function ExecutePerFrame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     $("#skill-timer").html(`스킬 : ${skillCool}초 남음`);
 
-    let rand_timer = Math.random();
     // Add boy
-    if (rand_timer >= 0.97) {
+    let rand_timer = Math.random();
+    if (rand_timer >= 0.965) {
       let char_int =
         Math.floor(Math.random() * 100) > 100 - boyfriendPercent
           ? girl.char
@@ -489,6 +490,7 @@ function collisionCheck(boy, i) {
       if (life === 2) {
         life--;
         boys.splice(i, 1);
+        playSound(lifeElem);
       } else {
         let gameOver = new Promise((resolve) => {
           playSound(gameOverElem);
