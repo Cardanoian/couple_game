@@ -6,7 +6,6 @@ const startBtn = $("#start-btn");
 const closeBtn = $("#close-btn");
 const menuScore = $("#menu-score");
 const lifeBar = $("#life");
-const firstBomb = 2;
 const couples = [
   "발규하민",
   "민주혹기",
@@ -16,6 +15,9 @@ const couples = [
   "호퍼서진",
   "유비커플",
 ];
+const firstBomb = 2;
+const basicBoyfriendPercent = 30;
+let boyfriendPercent = basicBoyfriendPercent;
 let character = 0;
 let boys = [];
 let animation;
@@ -23,7 +25,6 @@ let score = 0;
 let last_score = 0;
 let bomb = firstBomb;
 let skillCool = 10;
-let boyfriendPercent = 74;
 let playing = false;
 let pause = false;
 let onSkill = false;
@@ -103,7 +104,8 @@ function playSound(elem) {
 }
 
 // bgm on
-function bgmOn() {
+function bgmOn(src = "basic") {
+  bgmElem.src = `audio/bgm/${src}.mp3`;
   bgmElem.currentTime = 0;
   bgmElem.play();
 }
@@ -138,7 +140,6 @@ function makeOptions() {
 makeOptions();
 $("#select-character").on("change", function (e) {
   character = parseInt(e.target.options[e.target.selectedIndex].value);
-  console.log(character);
   if (character >= 0) {
     $("title").html(basic_title + " <<" + couples[parseInt(character)] + ">>");
     $(".favicon").attr("href", `img/girl/${character}.png`);
@@ -224,7 +225,7 @@ const girl_stat = [
     getPoint: 4,
     bombPoint: 50,
     img: "img/girl/1.png",
-    cool: 20,
+    cool: 15,
     skill: () => {
       playSound(skillElem);
       resetSkillCool();
@@ -252,7 +253,7 @@ const girl_stat = [
     getPoint: 8,
     bombPoint: 50,
     img: "img/girl/3.png",
-    cool: 15,
+    cool: 7,
     skill: () => {
       playSound(skillElem);
       resetSkillCool();
@@ -280,7 +281,7 @@ const girl_stat = [
     getPoint: 5,
     bombPoint: 50,
     img: "img/girl/5.png",
-    cool: 15,
+    cool: 25,
     skill: () => {
       playSound(skillElem);
       resetSkillCool();
@@ -294,7 +295,7 @@ const girl_stat = [
     getPoint: 7,
     bombPoint: 50,
     img: "img/girl/6.png",
-    cool: 15,
+    cool: 20,
     skill: () => {
       playSound(skillElem);
       resetSkillCool();
@@ -314,7 +315,6 @@ const boy_stat = [
 
 class Girl {
   constructor(char) {
-    console.log(char);
     this.width = girl_stat[char].size;
     this.height = girl_stat[char].size;
     this.x = canvas.width / 2 - this.width / 2;
@@ -401,7 +401,7 @@ function ExecutePerFrame() {
     // Add boy
     if (rand_timer >= 0.97) {
       let char_int =
-        Math.floor(Math.random() * 100) > boyfriendPercent
+        Math.floor(Math.random() * 100) > 100 - boyfriendPercent
           ? girl.char
           : Math.floor(Math.random() * 7);
       let x = Math.floor(Math.random() * 400);
@@ -467,7 +467,10 @@ function collisionCheck(boy, i) {
     if (status.immortal) {
       playSound(immortalElem);
       boys.splice(i, 1);
-    } else if (status.invisible || (status.superHamin && boy.char === 0)) {
+    } else if (
+      (status.invisible && girl.char !== boy.char) ||
+      (status.superHamin && boy.char === 0)
+    ) {
     } else if (girl.char === boy.char || status.lovely) {
       playSound(pointElem);
       boys.splice(i, 1);
@@ -550,17 +553,17 @@ function resetSkillCool() {
 function yunseoSkill() {
   if (!onSkill) {
     onSkill = true;
-    girl.width = 20;
-    girl.height = 20;
+    status.invisible = true;
+    girl.speed = 5;
     setTimeout(() => {
       skillZone.addClass("danger");
+    }, 4000);
+    setTimeout(() => {
+      girl.speed = 2;
+      status.invisible = false;
     }, 5000);
     setTimeout(() => {
-      girl.width = 75;
-      girl.height = 75;
-      status.invisible = true;
-    }, 6000);
-    setTimeout(() => {
+      girl.speed = 3;
       onSkill = false;
       skillZone.removeClass("danger");
       status.invisible = false;
@@ -570,13 +573,14 @@ function yunseoSkill() {
 
 function squidSkill() {
   if (!onSkill) {
+    life = life === 1 ? life + 1 : life;
     onSkill = true;
     girl.speed = 8;
     setTimeout(() => {
       skillZone.addClass("danger");
     }, 3000);
     setTimeout(() => {
-      girl.speed = 3;
+      girl.speed = 2;
     }, 4000);
     setTimeout(() => {
       onSkill = false;
@@ -589,15 +593,15 @@ function squidSkill() {
 function uengSkill() {
   if (!onSkill) {
     onSkill = true;
-    boyfriendPercent = 9;
+    boyfriendPercent = 80;
     setTimeout(() => {
       skillZone.addClass("danger");
-      boyfriendPercent = 89;
+      boyfriendPercent = 20;
     }, 8000);
     setTimeout(() => {
       onSkill = false;
       skillZone.removeClass("danger");
-      boyfriendPercent = 74;
+      boyfriendPercent = basicBoyfriendPercent;
     }, 11000);
   }
 }
