@@ -1,6 +1,7 @@
 const basic_title = "커플게임";
 const firstBomb = 2;
 const bombPic = $("#bomb-pic");
+const skillZone = $("#skill-zone");
 const couples = [
   "발규하민",
   "민주혹기",
@@ -24,9 +25,15 @@ let playing = false;
 let canvas = document.getElementById("character");
 let ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth > 600 ? 500 : window.innerWidth - 100;
-canvas.height = window.innerHeight > 800 ? 700 : window.innerHeight - 100;
+canvas.width = 560;
+canvas.height = 740;
 
+// 창 크기 변경
+$(document).ready(function () {
+  window.resizeTo(610, 880);
+});
+
+// 선 긋기
 function drawLine() {
   ctx.beginPath();
   ctx.moveTo(0, canvas.height - 15);
@@ -38,7 +45,7 @@ drawLine();
 
 // 배경화면 크기 설정
 $("body").css({
-  backgroundSize: `${window.innerWidth}px ${window.innerHeight}px`,
+  backgroundSize: `${canvas.width + 10}px ${canvas.height + 80}px`,
 });
 
 // 폭탄 위치, 크기 설정
@@ -54,21 +61,21 @@ bombPic.children("img").css({
 });
 
 // 스킬 존 설정
-$("#skill-zone").css({
+skillZone.css({
   top: canvas.height + 20,
   left: canvas.width / 2 - 70,
 });
 
 // 오디오 설정
 $("#audio").css({
-  top: canvas.height + 50,
-  left: canvas.width - 90,
+  top: canvas.height + 48,
+  left: canvas.width - 130,
 });
 
 const bgmBtn = document.querySelector("#bgm-btn");
 const bombElem = document.querySelector("#bomb-effect");
 const gameOverElem = document.querySelector("#gameover");
-const invalElem = document.querySelector("#gameover");
+const invalElem = document.querySelector("#inval");
 const pointElem = document.querySelector("#point");
 const skillElem = document.querySelector("#skill");
 const startElem = document.querySelector("#start");
@@ -137,6 +144,36 @@ $("#select-character").on("change", function (e) {
   if (character >= 0) {
     $("title").html(basic_title + " <<" + couples[parseInt(character)] + ">>");
     $(".favicon").attr("href", `img/girl/${character}.png`);
+    switch (character) {
+      case 0:
+        skillElem.src = "audio/skill/bakka.mp3";
+        break;
+      case 1:
+        if (Math.random() >= 0.5) {
+          skillElem.src = "audio/skill/siden.mp3";
+        } else {
+          skillElem.src = "audio/skill/ohohoh.mp3";
+        }
+        break;
+      case 2:
+        skillElem.src = "audio/skill/tt.mp3";
+        break;
+      case 3:
+        skillElem.src = "audio/skill/mamot.mp3";
+        break;
+      case 4:
+        skillElem.src = "audio/skill/baby.mp3";
+        break;
+      case 5:
+        skillElem.src = "audio/skill/squid.mp3";
+        break;
+      case 6:
+        skillElem.src = "audio/skill/ys.mp3";
+        break;
+      default:
+        skillElem.src = "audio/skill.mp3";
+        break;
+    }
   } else {
     $("title").html(basic_title);
   }
@@ -201,7 +238,7 @@ const girl_stat = [
       resetSkillCool();
       ttSkill();
     },
-    30,
+    25,
   ], // 텅텅
   [
     80,
@@ -215,7 +252,7 @@ const girl_stat = [
       resetSkillCool();
       kukuSkill();
     },
-    12,
+    7,
   ], // 지영
   [
     65,
@@ -243,7 +280,7 @@ const girl_stat = [
       resetSkillCool();
       squidSkill();
     },
-    15,
+    13,
   ], //  서진
   [
     75,
@@ -319,6 +356,7 @@ let girl = new Girl(character);
 
 // Start 버튼을 누를 때
 $("#start-btn").on("click", () => {
+  playing = true;
   playSound(startElem);
   girl = new Girl(character);
   resetGame();
@@ -328,40 +366,42 @@ $("#start-btn").on("click", () => {
 });
 
 function ExecutePerFrame() {
-  animation = requestAnimationFrame(ExecutePerFrame);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  $("#skill-timer").html(`스킬 : ${skillCool}초 남음`);
-  drawLine();
+  if (playing) {
+    animation = requestAnimationFrame(ExecutePerFrame);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    $("#skill-timer").html(`스킬 : ${skillCool}초 남음`);
+    drawLine();
 
-  let rand_timer = Math.random();
-  // Add boy
-  if (rand_timer >= 0.98) {
-    let char_int =
-      Math.floor(Math.random() * 100) > boyfriendPercent
-        ? girl.char
-        : Math.floor(Math.random() * 7);
-    let x = Math.floor(Math.random() * 400);
-    let boy = new Boy(x, char_int);
-    boys.push(boy);
-    // boys.draw();
-    boy.draw();
-  }
-
-  boys.forEach(function (a, i, o) {
-    // 바닥에 닿으면 => 제거
-    if (a.y > canvas.height - a.height) {
-      o.splice(i, 1);
+    let rand_timer = Math.random();
+    // Add boy
+    if (rand_timer >= 0.98) {
+      let char_int =
+        Math.floor(Math.random() * 100) > boyfriendPercent
+          ? girl.char
+          : Math.floor(Math.random() * 7);
+      let x = Math.floor(Math.random() * 400);
+      let boy = new Boy(x, char_int);
+      boys.push(boy);
+      // boys.draw();
+      boy.draw();
     }
 
-    // boy move and draw
-    a.y += a.speed;
+    boys.forEach(function (a, i, o) {
+      // 바닥에 닿으면 => 제거
+      if (a.y > canvas.height - a.height) {
+        o.splice(i, 1);
+      }
 
-    collisionCheck(a, i);
-    a.draw();
-  });
+      // boy move and draw
+      a.y += a.speed;
 
-  // girl Draw
-  girl.draw();
+      collisionCheck(a, i);
+      a.draw();
+    });
+
+    // girl Draw
+    girl.draw();
+  }
 }
 
 // 게임 리셋
@@ -406,8 +446,7 @@ function collisionCheck(boy, i) {
         resolve();
       });
       gameOver.then(() => {
-        resetGame();
-        alert(`Game Over!`);
+        playing = false;
       });
     }
   }
@@ -419,7 +458,7 @@ document.addEventListener("keydown", function (e) {
   if (e.key === "z" || e.key === "Z") {
     if (bomb > 0 && playing === true) {
       bomb -= 1;
-      boys = boys.filter((e) => e.char === 0);
+      boys = boys.filter((e) => e.char === girl.char);
 
       // boys.forEach(function (e, i, o) {
       //   if (e.char !== girl.char) {
@@ -431,10 +470,14 @@ document.addEventListener("keydown", function (e) {
   } else if (e.key === "Left" || e.key === "ArrowLeft") {
     if (girl.x >= girl.speed * 10) {
       girl.x -= girl.speed * 10;
+    } else {
+      girl.x = 0;
     }
   } else if (e.key === "Right" || e.key === "ArrowRight") {
     if (girl.x <= canvas.width - girl.speed * 10) {
       girl.x += girl.speed * 10;
+    } else {
+      girl.x = canvas.width - girl.width;
     }
   } else if (e.key === "x" || e.key === "X") {
     if (skillCool === 0) {
@@ -462,31 +505,41 @@ function yunseoSkill() {
   girl.width = 20;
   girl.height = 20;
   setTimeout(() => {
+    skillZone.addClass("danger");
+  }, 5000);
+  setTimeout(() => {
     girl.width = 75;
     girl.height = 75;
     girl.char = 997;
   }, 6000);
   setTimeout(() => {
+    skillZone.removeClass("danger");
     girl.char = 6;
-  }, 6500);
+  }, 7000);
 }
 
 function squidSkill() {
   girl.speed = 8;
   setTimeout(() => {
+    skillZone.addClass("danger");
+  }, 3000);
+  setTimeout(() => {
     girl.speed = 3;
   }, 4000);
   setTimeout(() => {
+    skillZone.removeClass("danger");
     girl.speed = 4;
-  }, 8000);
+  }, 6000);
 }
 
 function uengSkill() {
-  boyfriendPercent = 19;
+  boyfriendPercent = 9;
   setTimeout(() => {
+    skillZone.addClass("danger");
     boyfriendPercent = 89;
   }, 8000);
   setTimeout(() => {
+    skillZone.removeClass("danger");
     boyfriendPercent = 74;
   }, 11000);
 }
@@ -500,6 +553,10 @@ function kukuSkill() {
 function ttSkill() {
   girl.char = 1000;
   setTimeout(() => {
+    skillZone.addClass("danger");
+  }, 2000);
+  setTimeout(() => {
+    skillZone.removeClass("danger");
     girl.char = 999;
   }, 3000);
   setTimeout(() => {
@@ -510,6 +567,10 @@ function ttSkill() {
 function minjuSkill() {
   girl.char = 998;
   setTimeout(() => {
+    skillZone.addClass("danger");
+  }, 3000);
+  setTimeout(() => {
+    skillZone.removeClass("danger");
     girl.char = 1;
   }, 4000);
 }

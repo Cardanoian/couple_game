@@ -7,6 +7,7 @@ body {
   font-family: "maplestory", sans-serif;
   background-image: url("img/bg.png");
   background-size: contain;
+  background-repeat: no-repeat;
 }
 
 #character-sel {
@@ -15,6 +16,7 @@ body {
   align-content: space-between;
   font-size: x-large;
   margin-bottom: 10px;
+  margin-left: 30px;
   display: block;
   float: left;
 }
@@ -26,24 +28,26 @@ body {
 
 #select-character {
   height: 30px;
-  width: 140px;
+  width: 120px;
   font-size: large;
   /*margin: 5px;*/
   text-align: center;
   font-family: maplestory, sans-serif;
 }
 
+#start-btn {
+  display: inline-block;
+  width: 90px;
+  height: 32px;
+  float: left;
+  margin: 0 10px 5px 10px;
+  font-size: x-large;
+}
+
 #score-board {
   display: inline-block;
   float: left;
   margin: 5px 5px 5px 5px;
-  font-size: x-large;
-}
-
-button {
-  display: inline-block;
-  float: left;
-  margin: 0 10px 5px 10px;
   font-size: x-large;
 }
 
@@ -73,6 +77,10 @@ button {
 
 #bgm-btn {
   font-family: "maplestory", sans-serif;
+  display: inline-block;
+  float: left;
+  margin: 0 10px 5px 10px;
+  font-size: x-large;
 }
 
 #skill-zone {
@@ -82,4 +90,8 @@ button {
   position: fixed;
   left: 10px;
   color: white;
+}
+
+.danger {
+  background-color: rgba(182,0,0,0.6);
 }
