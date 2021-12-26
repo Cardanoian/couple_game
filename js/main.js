@@ -34,14 +34,14 @@ $(document).ready(function () {
 });
 
 // 선 긋기
-function drawLine() {
-  ctx.beginPath();
-  ctx.moveTo(0, canvas.height - 15);
-  ctx.lineTo(canvas.width, canvas.height - 15);
-  ctx.lineWidth = 10;
-  ctx.stroke();
-}
-drawLine();
+// function drawLine() {
+//   ctx.beginPath();
+//   ctx.moveTo(0, canvas.height - 15);
+//   ctx.lineTo(canvas.width, canvas.height - 15);
+//   ctx.lineWidth = 10;
+//   ctx.stroke();
+// }
+// drawLine();
 
 // 배경화면 크기 설정
 $("body").css({
@@ -370,7 +370,7 @@ function ExecutePerFrame() {
     animation = requestAnimationFrame(ExecutePerFrame);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     $("#skill-timer").html(`스킬 : ${skillCool}초 남음`);
-    drawLine();
+    // drawLine();
 
     let rand_timer = Math.random();
     // Add boy
