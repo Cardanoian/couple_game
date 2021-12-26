@@ -374,7 +374,7 @@ function ExecutePerFrame() {
 
     let rand_timer = Math.random();
     // Add boy
-    if (rand_timer >= 0.98) {
+    if (rand_timer >= 0.975) {
       let char_int =
         Math.floor(Math.random() * 100) > boyfriendPercent
           ? girl.char
